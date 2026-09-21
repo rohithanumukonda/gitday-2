@@ -1,0 +1,22 @@
+import boto3
+
+# Create EC2 client
+ec2 = boto3.client("ec2")
+
+
+def check_ami_status(ami_id):
+
+    response = ec2.describe_images(
+        ImageIds=[ami_id]
+    )
+
+    images = response.get("Images", [])
+
+    if not images:
+        return "AMI_NOT_FOUND"
+
+    ami_state = images[0]["State"]
+
+    print(f"AMI {ami_id} status: {ami_state}")
+
+    return ami_state
